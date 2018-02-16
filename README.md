@@ -58,6 +58,7 @@ Location: http://desktop.energy-manager.de/index.html
 #### 4. Get an accessToken from /js/context.js
 ```
 GET https://desktop.energy-manager.de/js/context.js
+Cookie: webcore_sid=[webcore_sid_cookie]
 ```
 Which should return some javascript that can be parsed. The accessToken will be stored and used to establish a connection to the websocket.
 
