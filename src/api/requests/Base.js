@@ -6,7 +6,7 @@ class Base {
   convertToMessage() {
     const json = JSON.stringify(this);
     const escaped = json.replace(/"/g, '\\"');
-    return escaped;
+    return '["' + escaped + '"]';
   }
 }
 
