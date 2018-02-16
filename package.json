@@ -1,0 +1,12 @@
+{
+  "name": "kiwigrid-cloud-ws-api",
+  "version": "1.0.0",
+  "description": "WebSockets api for cloud.kiwigrid.com (unofficial/unsupported)",
+  "main": "src/index.js",
+  "repository": "https://github.com/LarsBaertschi/kiwigrid-cloud-ws-api.git",
+  "author": "Lars Bärtschi <lars.baertschi@bluewin.ch>",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^4.0.0"
+  }
+}
