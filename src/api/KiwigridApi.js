@@ -1,23 +1,37 @@
 const WebSocket = require('ws');
 
+const Authentication = require('./Authentication');
 const GetDevices = require('./requests/device/GetDevices');
 
 const Answer = require('./answers/Base');
 
 class KiwigridApi {
-  constructor(wsUrl) {
+  constructor(wsUrl, username, password) {
     this.wsUrl = wsUrl;
+
+    this.auth = new Authentication(username, password);
 
     this.sendPing = this.sendPing.bind(this);
   }
 
   connect() {
-    this.wsClient = new WebSocket(this.wsUrl);
+    this.auth.getSessionID().then(sessionId =>
+      this.auth.authorize(sessionId).then(grantUrl =>
+        this.auth.grantAuth(grantUrl).then(sidCookie =>
+          this.auth.getAccessToken(sidCookie).then(accessToken => {
+            this.accessToken = accessToken;
+            this.wsClient = new WebSocket(this.wsUrl);
 
-    this.wsClient.on('open', () => this.onOpen());
-    this.wsClient.on('close', (code, reason) => this.onClose(code, reason));
+            this.wsClient.on('open', () => this.onOpen());
+            this.wsClient.on('close', (code, reason) =>
+              this.onClose(code, reason)
+            );
 
-    this.wsClient.on('message', message => this.onMessage(message));
+            this.wsClient.on('message', message => this.onMessage(message));
+          })
+        )
+      )
+    );
   }
 
   onOpen() {
@@ -38,10 +52,7 @@ class KiwigridApi {
     if (msg === 'o') {
       this.sendPing();
       this.send(
-        new GetDevices(
-          'accessToken',
-          'a6b1a152-dbc8-48a6-b261-d9aa8c53b03e'
-        )
+        new GetDevices(this.accessToken, 'a6b1a152-dbc8-48a6-b261-d9aa8c53b03e')
       );
       return;
       /* this.sendRaw(

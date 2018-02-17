@@ -7,6 +7,7 @@
   "author": "Lars Bärtschi <lars.baertschi@bluewin.ch>",
   "license": "MIT",
   "dependencies": {
+    "request": "^2.83.0",
     "ws": "^4.0.0"
   }
 }
